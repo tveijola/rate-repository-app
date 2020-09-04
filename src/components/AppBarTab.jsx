@@ -1,6 +1,7 @@
 import React from 'react';
 import Text from './Text';
-import { TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableHighlight } from 'react-native';
+import { Link } from 'react-router-native';
 
 const styles = StyleSheet.create({
   tab: {
@@ -8,9 +9,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const AppBarTab = ({ tabText }) => {
+const AppBarTab = ({ tabText, path }) => {
   return (
-    <TouchableWithoutFeedback>
+    <Link to={path} component={TouchableHighlight} activeOpacity={0.8}>
       <Text
         color='textAppBarTab'
         style={styles.tab}
@@ -18,7 +19,7 @@ const AppBarTab = ({ tabText }) => {
       >
         {tabText}
       </Text>
-    </TouchableWithoutFeedback>
+    </Link>
   );
 };
 
