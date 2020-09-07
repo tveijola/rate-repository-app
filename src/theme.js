@@ -6,6 +6,7 @@ const theme = {
     textAppBarTab: '#d9d9d9',
     primary: '#0366d6',
     appBarBackground: '#24292e',
+    error: '#ff1a1a',
   },
   fontSizes: {
     body: 14,
