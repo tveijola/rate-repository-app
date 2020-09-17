@@ -50,20 +50,30 @@ const validationSchema = yup.object().shape({
     .required('Password is required'),
 });
 
-const SignInForm = ({ onSubmit }) => {
+export const SignInForm = ({ onSubmit }) => {
   return (
-    <View style={styles.form}>
-      <FormikTextInput style={styles.input} placeholder='Username' name='username' />
-      <FormikTextInput style={styles.input} secureTextEntry={true} placeholder='Password' name='password' />
-      <TouchableWithoutFeedback onPress={onSubmit}>
-        <Text
-          style={styles.submitButton}
-          color='textLight'
-        >
-          Sign In
+    <Formik
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      validationSchema={validationSchema}
+    >
+      {({ handleSubmit }) => {
+        return (
+          <View style={styles.form}>
+            <FormikTextInput style={styles.input} placeholder='Username' name='username' testID='usernameInput' />
+            <FormikTextInput style={styles.input} secureTextEntry={true} placeholder='Password' name='password' testID='passwordInput' />
+            <TouchableWithoutFeedback onPress={handleSubmit} testID='signInButton'>
+              <Text
+                style={styles.submitButton}
+                color='textLight'
+              >
+                Sign In
             </Text>
-      </TouchableWithoutFeedback>
-    </View>
+            </TouchableWithoutFeedback>
+          </View>
+        );
+      }}
+    </Formik>
   );
 };
 
@@ -77,20 +87,12 @@ const SignIn = () => {
     try {
       const { data } = await signIn({ username, password });
       console.log(data);
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     }
   };
 
-  return (
-    <Formik
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      validationSchema={validationSchema}
-    >
-      {({ handleSubmit }) => <SignInForm onSubmit={handleSubmit} />}
-    </Formik>
-  );
+  return <SignInForm onSubmit={onSubmit} />;
 };
 
 export default SignIn;
