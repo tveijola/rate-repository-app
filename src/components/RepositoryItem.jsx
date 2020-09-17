@@ -65,13 +65,13 @@ const RepositoryItem = ({ repository }) => {
           source={{ uri: repository.ownerAvatarUrl }}
         />
         <View style={styles.flexTitleContainer}>
-          <Text style={styles.flexItem} fontWeight='bold' fontSize='subheading'>
+          <Text style={styles.flexItem} fontWeight='bold' fontSize='subheading' testID="repoFullName">
             {repository.fullName}
           </Text>
-          <Text style={styles.flexItem}>
+          <Text style={styles.flexItem} testID="repoDescription">
             {repository.description}
           </Text>
-          <Text style={styles.flexLanguageItem} color='textLight'>
+          <Text style={styles.flexLanguageItem} color='textLight' testID="repoLanguage">
             {repository.language}
           </Text>
         </View>
@@ -79,16 +79,20 @@ const RepositoryItem = ({ repository }) => {
       <View style={styles.flexStatContainer}>
         <RepositoryStat
           label='Stars'
-          stat={repository.stargazersCount} />
+          stat={repository.stargazersCount}
+          testID="repoStars" />
         <RepositoryStat
           label='Forks'
-          stat={repository.forksCount} />
+          stat={repository.forksCount}
+          testID="repoForks" />
         <RepositoryStat
           label='Reviews'
-          stat={repository.reviewCount} />
+          stat={repository.reviewCount}
+          testID="repoReviews" />
         <RepositoryStat
           label='Rating'
-          stat={repository.ratingAverage} />
+          stat={repository.ratingAverage}
+          testID="repoRating" />
       </View>
     </View>
   );

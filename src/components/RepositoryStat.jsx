@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Text from './Text';
+import formatDisplayNumber from '../utils/formatDispalyNumber';
 
 const styles = StyleSheet.create({
   flexColumnContainer: {
@@ -13,14 +14,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const RepositoryStat = ({ label, stat }) => {
-  if (stat > 1000) {
-    stat = `${(stat / 1000).toFixed(1)}k`;
-  }
-
+const RepositoryStat = ({ label, stat, testID }) => {
   return (
     <View style={styles.flexColumnContainer}>
-      <Text fontWeight='bold'>{stat}</Text>
+      <Text fontWeight='bold' testID={testID}>{formatDisplayNumber(stat)}</Text>
       <Text>{label}</Text>
     </View>
   );
