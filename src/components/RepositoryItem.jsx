@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, StyleSheet, Button } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Linking from 'expo-linking';
 import Text from './Text';
 import RepositoryStat from './RepositoryStat';
@@ -54,6 +54,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     padding: 5,
     borderRadius: 5
+  },
+  githubLink: {
+    margin: 15,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flexGrow: 1,
+    backgroundColor: theme.colors.primary
   }
 });
 
@@ -100,9 +108,16 @@ const RepositoryItem = ({ repository, displayLinkButton }) => {
           stat={repository.ratingAverage}
           testID="repoRating" />
       </View>
-      <View style={{ margin: 15 }}>
-        {displayLinkButton ? <Button onPress={onPress} title="Open in GitHub" /> : null}
-      </View>
+      {
+        displayLinkButton
+          ?
+          <View style={styles.githubLink} >
+            <TouchableOpacity onPress={onPress}>
+              <Text style={{ color: theme.colors.textLight }}>Open in GitHub</Text>
+            </TouchableOpacity>
+          </View>
+          : null
+      }
     </View>
   );
 };
