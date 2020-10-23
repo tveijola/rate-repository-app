@@ -1,7 +1,8 @@
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
+import { useHistory } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -15,12 +16,22 @@ export const RepositoryListContainer = ({repositories}) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
+
+  const history = useHistory();
+  
+  const onPress = (id) => {
+    history.push(`/${id}`);
+  };
   
   return (
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => <RepositoryItem repository={item} />}
+      renderItem={({ item }) => 
+      <TouchableOpacity onPress={() => onPress(item.id)}>
+        <RepositoryItem repository={item} displayLinkButton={false} />
+      </TouchableOpacity>
+      }
       keyExtractor={item => item.id}
     />
   );

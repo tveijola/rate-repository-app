@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Button } from 'react-native';
+import * as Linking from 'expo-linking';
 import Text from './Text';
 import RepositoryStat from './RepositoryStat';
 import theme from '../theme';
@@ -56,7 +57,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const RepositoryItem = ({ repository }) => {
+const RepositoryItem = ({ repository, displayLinkButton }) => {
+
+  const onPress = () => {
+    Linking.openURL(repository.url);
+  };
+
   return (
     <View style={styles.flexMainContainer}>
       <View style={styles.flexImageAndTitleContainer}>
@@ -93,6 +99,9 @@ const RepositoryItem = ({ repository }) => {
           label='Rating'
           stat={repository.ratingAverage}
           testID="repoRating" />
+      </View>
+      <View style={{ margin: 15 }}>
+        {displayLinkButton ? <Button onPress={onPress} title="Open in GitHub" /> : null}
       </View>
     </View>
   );
