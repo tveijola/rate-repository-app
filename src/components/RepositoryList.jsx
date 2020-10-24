@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { useHistory } from 'react-router-native';
+import RNPickerSelect from 'react-native-picker-select';
+
 import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
-import { useHistory } from 'react-router-native';
 
 const styles = StyleSheet.create({
   separator: {
@@ -12,25 +14,49 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />;
 
-export const RepositoryListContainer = ({repositories}) => {
+const SortSelector = ({ sortBy, setSortBy }) => {
+
+  const items = [
+    { label: 'Latest repositories', value: 'latest' },
+    { label: 'Highest rated repositories', value: 'highrating' },
+    { label: 'Lowest rated repositories', value: 'lowrating' },
+  ];
+
+  const onSelect = (value) => {
+    if (value) {
+      setSortBy(value);
+    }
+  };
+
+  return (
+    <RNPickerSelect
+      onValueChange={(value) => onSelect(value)}
+      value={sortBy}
+      items={items}
+    />
+  );
+};
+
+const RepositoryListContainer = ({ repositories, sortBy, setSortBy }) => {
   const repositoryNodes = repositories
     ? repositories.edges.map(edge => edge.node)
     : [];
 
   const history = useHistory();
-  
+
   const onPress = (id) => {
     history.push(`/${id}`);
   };
-  
+
   return (
     <FlatList
       data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
-      renderItem={({ item }) => 
-      <TouchableOpacity onPress={() => onPress(item.id)}>
-        <RepositoryItem repository={item} displayLinkButton={false} />
-      </TouchableOpacity>
+      ListHeaderComponent={() => SortSelector({ sortBy, setSortBy })}
+      renderItem={({ item }) =>
+        <TouchableOpacity onPress={() => onPress(item.id)}>
+          <RepositoryItem repository={item} displayLinkButton={false} />
+        </TouchableOpacity>
       }
       keyExtractor={item => item.id}
     />
@@ -38,8 +64,9 @@ export const RepositoryListContainer = ({repositories}) => {
 };
 
 const RepositoryList = () => {
-  const { repositories } = useRepositories();
-  return <RepositoryListContainer repositories={repositories} />;
+  const [sortBy, setSortBy] = useState('latest');
+  const { repositories } = useRepositories(sortBy);
+  return <RepositoryListContainer repositories={repositories} sortBy={sortBy} setSortBy={setSortBy} />;
 };
 
 export default RepositoryList;

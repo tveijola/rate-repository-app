@@ -25,8 +25,6 @@ const AppBar = () => {
     return <Text>Loading...</Text>;
   }
 
-  console.log(data);
-
   const authTab = data.authorizedUser
     ? { tabText: 'Sign Out', path: '/signout' }
     : { tabText: 'Sign In', path: '/signin' };
