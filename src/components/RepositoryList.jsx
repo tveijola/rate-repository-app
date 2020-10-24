@@ -1,46 +1,16 @@
 import React, { useState } from 'react';
-import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { useHistory } from 'react-router-native';
-import RNPickerSelect from 'react-native-picker-select';
-
-import RepositoryItem from './RepositoryItem';
+import { useDebounce } from 'use-debounce';
 import useRepositories from '../hooks/useRepositories';
 
-const styles = StyleSheet.create({
-  separator: {
-    height: 10,
-  },
-});
+import RepositoryListContainer from './RepositoryListContainer';
+import { useHistory } from 'react-router-native';
 
-const ItemSeparator = () => <View style={styles.separator} />;
+const RepositoryList = () => {
 
-const SortSelector = ({ sortBy, setSortBy }) => {
-
-  const items = [
-    { label: 'Latest repositories', value: 'latest' },
-    { label: 'Highest rated repositories', value: 'highrating' },
-    { label: 'Lowest rated repositories', value: 'lowrating' },
-  ];
-
-  const onSelect = (value) => {
-    if (value) {
-      setSortBy(value);
-    }
-  };
-
-  return (
-    <RNPickerSelect
-      onValueChange={(value) => onSelect(value)}
-      value={sortBy}
-      items={items}
-    />
-  );
-};
-
-const RepositoryListContainer = ({ repositories, sortBy, setSortBy }) => {
-  const repositoryNodes = repositories
-    ? repositories.edges.map(edge => edge.node)
-    : [];
+  const [sortBy, setSortBy] = useState('latest');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedValue] = useDebounce(searchQuery, 500);
+  const { repositories } = useRepositories(sortBy, debouncedValue);
 
   const history = useHistory();
 
@@ -49,24 +19,14 @@ const RepositoryListContainer = ({ repositories, sortBy, setSortBy }) => {
   };
 
   return (
-    <FlatList
-      data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={() => SortSelector({ sortBy, setSortBy })}
-      renderItem={({ item }) =>
-        <TouchableOpacity onPress={() => onPress(item.id)}>
-          <RepositoryItem repository={item} displayLinkButton={false} />
-        </TouchableOpacity>
-      }
-      keyExtractor={item => item.id}
+    <RepositoryListContainer
+      repositories={repositories}
+      onPress={onPress}
+      sortBy={sortBy} setSortBy={setSortBy}
+      searchQuery={searchQuery} setSearchQuery={setSearchQuery}
     />
   );
-};
 
-const RepositoryList = () => {
-  const [sortBy, setSortBy] = useState('latest');
-  const { repositories } = useRepositories(sortBy);
-  return <RepositoryListContainer repositories={repositories} sortBy={sortBy} setSortBy={setSortBy} />;
 };
 
 export default RepositoryList;
