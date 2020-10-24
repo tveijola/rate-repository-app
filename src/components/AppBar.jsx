@@ -34,6 +34,7 @@ const AppBar = () => {
   return <View style={styles.container}>
     <ScrollView horizontal>
       <AppBarTab tabText='Repositories' path='/' />
+      { data.authorizedUser ? <AppBarTab tabText='Create a review' path='/createreview' /> : null }
       <AppBarTab tabText={authTab.tabText} path={authTab.path} />
     </ScrollView>
   </View>;
