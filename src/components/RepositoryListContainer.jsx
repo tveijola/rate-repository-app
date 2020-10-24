@@ -52,7 +52,7 @@ class RepositoryListContainer extends React.Component {
 
   render() {
 
-    const { repositories, onPress } = this.props;
+    const { repositories, onPress, onEndReach } = this.props;
     const repositoryNodes = repositories
       ? repositories.edges.map(edge => edge.node)
       : [];
@@ -62,6 +62,8 @@ class RepositoryListContainer extends React.Component {
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         renderItem={({ item }) =>
           <TouchableOpacity onPress={() => onPress(item.id)}>
             <RepositoryItem repository={item} displayLinkButton={false} />

@@ -10,7 +10,22 @@ const RepositoryList = () => {
   const [sortBy, setSortBy] = useState('latest');
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedValue] = useDebounce(searchQuery, 500);
-  const { repositories } = useRepositories(sortBy, debouncedValue);
+
+  const variables = {
+    orderBy: sortBy === 'latest' ? 'CREATED_AT' : 'RATING_AVERAGE'
+  };
+
+  if (variables.sortBy === 'RATING_AVERAGE') {
+    variables.orderDirection = sortBy === 'highrating' ? 'DESC' : 'ASC';
+  }
+
+  if (searchQuery) {
+    variables.searchKeyword = debouncedValue;
+  }
+
+  variables.first = 8;
+
+  const { repositories, fetchMore } = useRepositories(variables);
 
   const history = useHistory();
 
@@ -18,10 +33,14 @@ const RepositoryList = () => {
     history.push(`/${id}`);
   };
 
+  const onEndReach = () => {
+    fetchMore();
+  };
+
   return (
     <RepositoryListContainer
       repositories={repositories}
-      onPress={onPress}
+      onPress={onPress} onEndReach={onEndReach}
       sortBy={sortBy} setSortBy={setSortBy}
       searchQuery={searchQuery} setSearchQuery={setSearchQuery}
     />
