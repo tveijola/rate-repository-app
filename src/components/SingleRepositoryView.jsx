@@ -94,7 +94,7 @@ const ReviewItem = ({ review }) => {
 
 const SingleRepositoryView = () => {
   const { id } = useParams();
-  const { repository } = useSingleRepository(id);
+  const { repository, fetchMore } = useSingleRepository({ id, first: 6 });
 
   if (!repository) return <Text>Loading...</Text>;
 
@@ -108,6 +108,8 @@ const SingleRepositoryView = () => {
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}
+      onEndReached={fetchMore}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ItemSeparator}
     />
   );

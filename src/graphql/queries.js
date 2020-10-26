@@ -49,7 +49,7 @@ export const GET_AUTHORIZED_USER = gql`
 `;
 
 export const GET_SINGLE_REPOSITORY = gql`
-  query GetSingleRepository($id: ID!) {
+  query GetSingleRepository($id: ID!, $first: Int, $after: String) {
     repository(id: $id) {
       id,
       fullName,
@@ -61,7 +61,7 @@ export const GET_SINGLE_REPOSITORY = gql`
       description,
       language,
       url,
-      reviews {
+      reviews (first: $first, after: $after) {
         edges {
           node {
             id
@@ -72,7 +72,14 @@ export const GET_SINGLE_REPOSITORY = gql`
               id
               username
             }
-          }
+          },
+          cursor
+        },
+        pageInfo {
+          endCursor,
+          startCursor,
+          totalCount,
+          hasNextPage
         }
       }
     }
