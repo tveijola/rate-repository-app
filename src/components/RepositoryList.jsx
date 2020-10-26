@@ -15,7 +15,7 @@ const RepositoryList = () => {
     orderBy: sortBy === 'latest' ? 'CREATED_AT' : 'RATING_AVERAGE'
   };
 
-  if (variables.sortBy === 'RATING_AVERAGE') {
+  if (variables.orderBy === 'RATING_AVERAGE') {
     variables.orderDirection = sortBy === 'highrating' ? 'DESC' : 'ASC';
   }
 
