@@ -33,6 +33,7 @@ const AppBar = () => {
     <ScrollView horizontal>
       <AppBarTab tabText='Repositories' path='/' />
       { data.authorizedUser ? <AppBarTab tabText='Create a review' path='/createreview' /> : null }
+      { data.authorizedUser ? <AppBarTab tabText='My reviews' path='/myreviews' /> : null }
       <AppBarTab tabText={authTab.tabText} path={authTab.path} />
       { data.authorizedUser ? null : <AppBarTab tabText='Sign Up' path='/signup' /> }
     </ScrollView>
